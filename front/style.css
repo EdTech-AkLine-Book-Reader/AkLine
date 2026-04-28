@@ -1,0 +1,839 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 7px solid #f3f3f3;
+    border-top: 7px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.hidden { display: none; }
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.registerh2, .loginh2 {
+    margin-top: 0px;
+}
+
+.container {
+    min-height: 100vh;
+    width: 100vw;
+    padding: 0px;
+    margin: 0px;
+    background-image: url("res/BookBG.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    perspective: 2000px;
+}
+
+.login-background, .register-background {
+    position: absolute;
+    top: 0;
+    min-height: 100vh;
+    width: 50%;
+    background: #0c141b;
+    z-index: 1;
+    box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+/* login visible on right by default */
+.login-background {
+    right: 0;
+    display: block;
+}
+
+/* register hidden on left by default */
+.register-background {
+    left: 0;
+    right: auto;
+    display: none;
+}
+
+/* ← top purple ambient glow blob — drifts slowly */
+.login-background::before, .register-background::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(217, 205, 248, 0.07) 0%, transparent 70%);
+    pointer-events: none;
+    animation: driftTop 8s ease-in-out infinite;
+}
+
+/* ← bottom green ambient glow blob — drifts opposite */
+.login-background::after, .register-background::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    right: -60px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(ellipse, rgba(185, 240, 216, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+    animation: driftBottom 8s ease-in-out 4s infinite;
+}
+
+@keyframes driftTop {
+    0%, 100% { transform: translateX(-50%) translateY(0px) scale(1); opacity: 0.5; }
+    33%       { transform: translateX(-40%) translateY(20px) scale(1.1); opacity: 0.8; }
+    66%       { transform: translateX(-60%) translateY(-10px) scale(0.95); opacity: 0.6; }
+}
+
+@keyframes driftBottom {
+    0%, 100% { transform: translateX(0px) translateY(0px) scale(1); opacity: 0.5; }
+    33%       { transform: translateX(-20px) translateY(-20px) scale(1.1); opacity: 0.8; }
+    66%       { transform: translateX(10px) translateY(10px) scale(0.9); opacity: 0.6; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(30px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ← title floats up and down idle */
+.login-label, .register-label {
+    position: absolute;
+    top: 1%;
+    left: 8%;
+    font-family: 'Cormorant Garamond';
+    font-size: 70px;
+    color: white;
+    animation:
+        slideDown 0.7s ease 0.2s both,
+        float 6s ease-in-out 1s infinite;
+    text-shadow: 0 0 40px rgba(217, 205, 248, 0.3);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); text-shadow: 0 0 40px rgba(217, 205, 248, 0.3); }
+    50%       { transform: translateY(-6px); text-shadow: 0 0 60px rgba(217, 205, 248, 0.5); }
+}
+
+.loginField-label, .registerField-label {
+    position: absolute;
+    left: 13%;
+    font-family: 'Cormorant Garamond';
+    font-size: 30px;
+    color: white;
+    animation: slideUp 0.7s ease 0.3s both;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+.emailLogin-label {
+    top: 21%;
+    left: 13%;
+}
+
+.passwordLogin-label {
+    top: 37%;
+    left: 13%;
+}
+
+/* ← inputs shimmer idle */
+.login-field, .register-field {
+    position: absolute;
+    left: 13%;
+    width: 500px;
+    height: 40px;
+    font-size: 25px;
+    border-radius: 30px;
+    background: #d9cdf8;
+    padding-left: 10px;
+    border: 2px solid transparent;
+    outline: none;
+    transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
+    animation: slideUp 0.7s ease 0.4s both;
+    cursor: text;
+}
+
+@keyframes shimmer {
+    0%, 100% { box-shadow: 0 0 8px rgba(217, 205, 248, 0.15); }
+    50%       { box-shadow: 0 0 18px rgba(217, 205, 248, 0.3); }
+}
+
+.login-field:focus, .register-field:focus {
+    border-color: rgba(185, 240, 216, 0.6);
+    background: #e8e0ff;
+    box-shadow:
+        0 0 10px rgba(217, 205, 248, 0.4),
+        0 0 30px rgba(217, 205, 248, 0.2),
+        0 0 60px rgba(217, 205, 248, 0.1);
+    animation: none;
+}
+
+.login-field:not(:focus), .register-field:not(:focus) {
+    /* ← stays glowing even after losing focus */
+    box-shadow: 0 0 18px rgba(217, 205, 248, 0.3);
+    animation: shimmer 4s ease-in-out infinite;
+}
+
+.login-field:hover:not(:focus), .login-field:hover:not(:focus) {
+    box-shadow: 0 0 20px rgba(217, 205, 248, 0.35);
+}
+
+.email-login {
+    left: 13%;
+    top: 31%;
+}
+
+.password-login {
+    left: 13%;
+    top: 47%;
+}
+
+.forgotPassword-label {
+    color: rgba(255, 255, 255, 0.5);
+    left: 55%;
+    top: 49%;
+    cursor: pointer;
+    transition: color 0.3s, text-shadow 0.3s;
+    animation: slideUp 0.7s ease 0.5s both;
+}
+
+.forgotPassword-label:hover {
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.remember-checkbox {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: #d9cdf8;
+}
+
+.rememberCheckbox-label {
+    font-size: 22px;
+}
+
+.checkbox-container {
+    position: absolute;
+    width: 63%;
+    top: 60%;
+    left: 16%;
+    animation: slideUp 0.7s ease 0.5s both;
+}
+
+/* ← button pulses idle */
+#loginBtn, #registerBtn {
+    position: absolute;
+    width: 500px;
+    height: 80px;
+    border-radius: 30px;
+    background: #d9cdf8;
+    left: 15%;
+    top: 66%;
+    font-size: 28px;
+    font-family: 'Cormorant Garamond';
+    border: none;
+    cursor: pointer;
+    transition: box-shadow 0.3s, transform 0.15s, background 0.3s;
+    animation:
+        slideUp 0.7s ease 0.6s both,
+        pulse 3s ease-in-out 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(217, 205, 248, 0.2); }
+    50%       { box-shadow: 0 0 35px rgba(217, 205, 248, 0.45); }
+}
+
+#loginBtn:hover, #registerBtn:hover {
+    background: #e8e0ff;
+    transform: translateY(-2px);
+    /* ← don't use animation: none, just override with transition */
+    box-shadow:
+        0 0 20px rgba(217, 205, 248, 0.5),
+        0 0 50px rgba(217, 205, 248, 0.25),
+        0 0 80px rgba(217, 205, 248, 0.1);
+}
+
+#loginBtn:active, #registerBtn:active {
+    transform: translateY(0px);
+    box-shadow: 0 0 10px rgba(217, 205, 248, 0.3);
+}
+
+#loginBtn:not(:hover), #registerBtn:not(:hover) {
+    /* ← stays glowing after hover */
+    box-shadow: 0 0 20px rgba(217, 205, 248, 0.3);
+}
+
+.or-label {
+    color: rgba(255, 255, 255, 0.5);
+    left: 45%;
+    top: 73%;
+    animation: slideUp 0.7s ease 0.7s both;
+}
+
+.createNew-label {
+    position: absolute;
+    font-family: 'Cormorant Garamond';
+    font-size: 23px;
+    color: white;
+    animation: slideUp 0.7s ease 0.8s both;
+}
+
+.newHere-label {
+    top: 82%;
+    left: 23%;
+}
+
+/* ← create account slowly glows */
+.createAccount-label {
+    color: #b9f0d8;
+    top: 82%;
+    left: 39.5%;
+    text-decoration: underline;
+    cursor: pointer;
+    animation:
+        slideUp 0.7s ease 0.8s both,
+        greenPulse 4s ease-in-out 1.5s infinite;
+    transition: color 0.3s, text-shadow 0.3s;  /* ← hover effects via transition only */
+}
+
+@keyframes greenPulse {
+    0%, 100% { text-shadow: 0 0 8px rgba(185, 240, 216, 0.2); }
+    50%       { text-shadow: 0 0 20px rgba(185, 240, 216, 0.5); }
+}
+
+.createAccount-label:hover,
+.createAccount-label:active {
+    color: #d9cdf8;
+    text-shadow:
+        0 0 10px rgba(185, 240, 216, 0.6),
+        0 0 25px rgba(185, 240, 216, 0.3);
+}
+
+/* ← floating particles */
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: floatParticle linear infinite;
+    opacity: 0;
+}
+
+@keyframes floatParticle {
+    0%   { transform: translateY(100vh) translateX(0px) scale(0.5); opacity: 0; }
+    10%  { opacity: 1; }
+    50%  { transform: translateY(50vh) translateX(20px) scale(1); opacity: 1; }
+    90%  { opacity: 0.8; }
+    100% { transform: translateY(-100px) translateX(-10px) scale(0.8); opacity: 0; }
+}
+
+    /*CREATE new account*/
+
+.register-label{
+    top: -7%;
+}
+
+.register-field {
+    height: 35px;
+}
+
+/*first Name*/
+.firstnameReg-label{
+    top: 11%;
+}
+
+.firstname-register {
+    top: 21%;
+}
+
+/*last name*/
+.lastnameReg-label {
+    top: 23%;
+}
+
+.lastname-register {
+    top: 33%;
+}
+
+/*Email*/
+.emailRegister-label {
+    top: 35%;
+}
+
+.email-register {
+    top: 45%;
+}
+
+/*Password*/
+.passwordRegister-label {
+    top: 47%;
+}
+
+.password-register {
+    top: 57%
+}
+
+/*confirm password*/
+.confirmPasswordRegister-label {
+    top: 59%;
+}
+
+.confirmPassword-register {
+    top: 69%;
+}
+
+.alreadyHave-label {
+    top: 89%;
+    left: 15%;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.backToLogin-label {
+    top: 89%;
+    left: 50%;
+    font-size: 18px;
+    color: #d9cdf8;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+.backToLogin-label:hover {
+    color: #b9f0d8;
+    text-shadow: 0 0 15px rgba(217, 205, 248, 0.5);
+}
+
+/*create account button*/
+#registerBtn {
+    height: 60px;
+    top: 78%;
+    left: 14%;
+}
+
+#registerMsg {
+    position: absolute;
+    top: 85%;
+    left: 58%;
+}
+
+#registerSpinner {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 6%;
+    left: 80%;
+}
+
+/*quotes part*/
+.quotes-container {
+    position: absolute;
+    min-height: 100vh;
+    width: 50%;
+    z-index: 1;
+    left: 0%;
+    top: 0%;
+}
+
+.logo {
+    position: absolute;
+    top: -55%;
+    left: -75%;
+    transform: scale(0.8);
+}
+
+.webName-label {
+    position: absolute;
+    top: -8%;
+    left: 18%;
+
+    font-size: 60px;
+    font-family: "vani", serif;
+    font-weight: bold;
+
+    background: linear-gradient(90deg, #c8b9f0, #f0b9c8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.tagline-label {
+    position: absolute;
+    top: 7%;
+    left: 17%;
+
+    font-size: 13px;
+    font-family: "georgia", serif;
+    font-style: italic;
+    color: #c8b9f0;
+}
+
+.phrase-label, .phrasePurple-label {
+    position: absolute;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 100px;
+    font-weight: bold;
+    color: white;
+}
+
+.firstPhrase {
+    left: 9%;
+    top: 10%;
+}
+
+.secondPhrase {
+    left: 9%;
+    top: 43%;
+}
+
+.phrasePurple-label {
+    color: #c8b9f0;
+    font-style: italic;
+    top: 26.4%;
+    left: 52%;
+}
+
+.phraseFooter-label {
+    position: absolute;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 20px;
+    color: white;
+
+    top: 85%;
+    left: 29%;
+}
+
+#loginMsg {
+    position: absolute;
+    left: 35%;
+}
+
+#loginSpinner {
+    position: absolute;
+    left: 7%;
+    top: 5%;
+}
+
+/*Handles different screen sizes*/
+
+
+/* ← TABLET (max 1024px) — Register */
+@media (max-width: 1024px) {
+    .register-background {
+        width: 65%;
+    }
+
+    .register-field {
+        width: 380px;
+    }
+
+    #registerBtn {
+        width: 380px;
+    }
+}
+
+/* ← MOBILE (max 768px) — Register */
+@media (max-width: 768px) {
+
+    .register-background {
+        width: 100%;
+        left: 0;
+        right: 0;
+    }
+
+    .register-label {
+        font-size: 50px;
+        top: 1%;
+        left: 6%;
+    }
+
+    .firstnameReg-label,
+    .lastnameReg-label,
+    .emailRegister-label,
+    .passwordRegister-label,
+    .confirmPasswordRegister-label {
+        font-size: 22px;
+        left: 8%;
+    }
+
+    .firstnameReg-label        { top: 23%; }
+    .lastnameReg-label         { top: 33%; }
+    .emailRegister-label       { top: 43%; }
+    .passwordRegister-label    { top: 53%; }
+    .confirmPasswordRegister-label { top: 63%; }
+
+    .register-field {
+        width: 85vw;
+        left: 7%;
+        font-size: 18px;
+        height: 38px;
+    }
+
+    .firstname-register        { top: 30%; }
+    .lastname-register         { top: 40%; }
+    .email-register            { top: 50%; }
+    .password-register         { top: 60%; }
+    .confirmPassword-register  { top: 70%; }
+
+    #registerBtn {
+        width: 85vw;
+        left: 7%;
+        top: 79%;
+        height: 55px;
+        font-size: 20px;
+    }
+
+    #registerMsg {
+        top: 87%;
+        left: 10%;
+        font-size: 14px;
+    }
+
+    .alreadyHave-label {
+        top: 92%;
+        left: 8%;
+        font-size: 16px;
+    }
+
+    .backToLogin-label {
+        top: 92%;
+        left: 55%;
+        font-size: 16px;
+    }
+}
+
+/* ← SMALL MOBILE (max 480px) — Register */
+@media (max-width: 480px) {
+    .register-label {
+        font-size: 42px;
+    }
+
+    .register-field {
+        width: 90vw;
+        left: 5%;
+    }
+
+    #registerBtn {
+        width: 90vw;
+        left: 5%;
+    }
+
+    .alreadyHave-label {
+        left: 5%;
+    }
+}
+
+
+/* ← TABLET (max 1024px) */
+@media (max-width: 1024px) {
+    .login-background {
+        width: 65%;
+    }
+
+    .login-field {
+        width: 380px;
+    }
+
+    #loginBtn {
+        width: 380px;
+    }
+
+    .phrase-label, .phrasePurple-label {
+        font-size: 70px;
+    }
+}
+
+/* ← MOBILE (max 768px) */
+@media (max-width: 768px) {
+
+    /* hide left side content on mobile */
+    .webName-label,
+    .tagline-label,
+    .phrase-label,
+    .phrasePurple-label,
+    .phraseFooter-label,
+    .logo {
+        display: none;
+    }
+
+    /* login panel takes full screen on mobile */
+    .login-background {
+        width: 100%;
+        left: 0;
+        right: 0;
+    }
+
+    .login-label, .register-label {
+        font-size: 50px;
+        top: 2%;
+        left: 6%;
+    }
+
+    .emailLogin-label,
+    .passwordLogin-label {
+        font-size: 22px;
+        left: 8%;
+    }
+
+    .emailLogin-label { top: 18%; }
+    .passwordLogin-label { top: 38%; }
+
+    .login-field {
+        width: 85vw;
+        left: 7%;
+        font-size: 18px;
+        height: 45px;
+    }
+
+    .email-login { top: 25%; }
+    .password-login { top: 46%; }
+
+    .forgotPassword-label {
+        font-size: 16px;
+        left: auto;
+        right: 8%;
+        top: 56%;
+    }
+
+    .checkbox-container {
+        top: 62%;
+        left: 8%;
+        width: 85%;
+    }
+
+    .rememberCheckbox-label {
+        font-size: 14px;
+    }
+
+    #loginBtn {
+        width: 85vw;
+        left: 7%;
+        top: 70%;
+        height: 60px;
+        font-size: 20px;
+    }
+
+    .or-label {
+        left: 44%;
+        top: 80%;
+        font-size: 18px;
+    }
+
+    .newHere-label {
+        top: 87%;
+        left: 15%;
+        font-size: 18px;
+    }
+
+    .createAccount-label {
+        top: 87%;
+        left: 38%;
+        font-size: 18px;
+    }
+
+    .loginMsg, .registerMsg {
+        font-size: 14px;
+    }
+}
+
+/* ← SMALL MOBILE (max 480px) */
+@media (max-width: 480px) {
+    .login-label, .register-label {
+        font-size: 42px;
+    }
+
+    .login-field {
+        width: 90vw;
+        left: 5%;
+    }
+
+    #loginBtn {
+        width: 90vw;
+        left: 5%;
+    }
+
+    .forgotPassword-label {
+        right: 5%;
+    }
+
+    .checkbox-container {
+        left: 5%;
+    }
+
+    .newHere-label {
+        left: 8%;
+    }
+}
+
+/*Flipping animation*/
+@keyframes flipOut {
+    0%   { transform: rotateY(0deg); }
+    100% { transform: rotateY(-90deg); }
+}
+
+@keyframes flipIn {
+    0%   { transform: rotateY(90deg); }
+    100% { transform: rotateY(0deg); }
+}
+
+@keyframes flipOutBack {
+    0%   { transform: rotateY(0deg); }
+    100% { transform: rotateY(90deg); }
+}
+
+@keyframes flipInBack {
+    0%   { transform: rotateY(-90deg); }
+    100% { transform: rotateY(0deg); }
+}
+
+.flip-out {
+    animation: flipOut 0.25s linear forwards !important;
+    transform-origin: left center;
+    z-index: 3;
+}
+
+.flip-in {
+    animation: flipIn 0.25s linear forwards !important;
+    transform-origin: right center;
+    z-index: 2;
+}
+
+.flip-out-back {
+    animation: flipOutBack 0.25s linear forwards !important;
+    transform-origin: right center;
+    z-index: 3;
+}
+
+.flip-in-back {
+    animation: flipInBack 0.25s linear forwards !important;
+    transform-origin: left center;
+    z-index: 2;
+}

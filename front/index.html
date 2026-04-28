@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Auth Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://db.onlinewebfonts.com/c/a806161b4ab9f06085dd7c969c6ab6f3?family=Vani" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+    <div style="display: none;">
+    <h2 class="registerh2">Register</h2>
+    <!-- <input type="text" id="registerFirstname" placeholder="First Name" /> -->
+    <!-- <input type="text" id="registerLastname" placeholder="Last Name" /> -->
+    <!-- <input type="text" id="registerEmail" placeholder="Email" /><br> -->
+    <!-- <input type="password" id="registerPassword" placeholder="Password (min 6 characters)" /> -->
+    <!-- <input type="password" id="registerConfirmPassword" placeholder=" Confirm Password" /> -->
+    <!-- <button id="registerBtn" onclick="register()">Register</button> -->
+    <!-- <span class="spinner hidden" id="registerSpinner"></span> -->
+    <!-- <p id="registerMsg"></p> -->
+
+    <hr>
+    </div>
+
+    <!-- <h2 class="loginh2">Login</h2> -->
+    <!-- <input type="text" id="loginEmail" placeholder="Email" /> -->
+    <!-- <input type="password" id="loginPassword" placeholder="Password" /> -->
+    <!-- <button id="loginBtn" onclick="login()">Login</button> -->
+    <!-- <span class="spinner hidden" id="loginSpinner"></span> -->
+    <!-- <p id="loginMsg"></p> -->
+
+        <div class="quotes-container">
+            <div class="logo">
+                <img src="res/logo.png">
+            </div>
+
+            <p class="webName-label">AkLine</p>
+            <p class="tagline-label">Everything You Need to Learn, is All in One Place</p>
+            <p class="phrase-label firstPhrase">&nbsp;&nbsp;Every book <br>
+                                    finds its </p>
+            <p class="phrasePurple-label">reader<br></p>
+            <p class="phrase-label secondPhrase">under the stars</p>
+            <p class="phraseFooter-label">-YOUR READING SANCTUARY</p>
+        </div>
+
+        <!-- Login Panel -->
+        <div class="login-background">
+
+            <p class="login-label">Log in</p>
+
+            <p class="loginField-label emailLogin-label">Email Address</p>
+            <input type="text" class="login-field email-login" id="loginEmail" placeholder="Email" />
+
+            <p class="loginField-label passwordLogin-label">Password</p>
+            <input type="password" class="login-field password-login" id="loginPassword" placeholder="Password" />
+
+            <p class="loginField-label forgotPassword-label">Forgot Password</p>
+
+            <div class="checkbox-container">
+                <input type="checkbox" class="remember-checkbox" />
+                <label class="loginField-label rememberCheckbox-label" for="remember-checkbox">REMEMBER ME ON THIS DEVICE</label>
+            </div>
+
+            <button id="loginBtn" onclick="login()">LOG IN TO AKLINE</button>
+
+            <p class=" loginField-label or-label">_or_</p>
+
+            <p class="newHere-label createNew-label">NEW HERE?</p>
+            <p class="createAccount-label createNew-label" onclick="switchToRegister()">CREATE AN ACCOUNT</p>
+
+            <p id="loginMsg"></p>
+            <span class="spinner hidden" id="loginSpinner"></span>
+        </div>
+
+        <!-- Create new account Panel -->
+
+        <div class="register-background">
+            <p class="register-label">Create Account</p>
+
+            <p class="registerField-label firstnameReg-label">First Name</p>
+            <input type="text" class="register-field firstname-register" id="registerFirstname" placeholder="First Name" />
+
+            <p class="registerField-label lastnameReg-label">Last Name</p>
+            <input type="text" class="register-field lastname-register" id="registerLastname" placeholder="Last Name" />
+
+            <p class="registerField-label emailRegister-label">Email Address</p>
+            <input type="text" class="register-field email-register" id="registerEmail" placeholder="Email" />
+
+            <p class="registerField-label passwordRegister-label">Password</p>
+            <input type="password" class="register-field password-register" id="registerPassword" placeholder="Password (min 6 characters)" />
+
+            <p class="registerField-label confirmPasswordRegister-label">Confirm Password</p>
+            <input type="password" class="register-field confirmPassword-register" id="registerConfirmPassword" placeholder="Confirm Password" />
+
+            <button id="registerBtn" onclick="register()">CREATE ACCOUNT</button>
+
+            <p class="alreadyHave-label createNew-label">ALREADY HAVE AN ACCOUNT?</p>
+            <!-- ← onclick calls switchToLogin() -->
+            <p class="backToLogin-label createNew-label" onclick="switchToLogin()">LOG IN</p>
+
+            <p id="registerMsg"></p>
+            <span class="spinner hidden" id="registerSpinner"></span>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

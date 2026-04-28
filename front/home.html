@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AkLine Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="home.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="profile-icon" onclick="toggleProfilePanel()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+    </svg>
+  </div>
+  <div class="nav-links">
+    <a href="#" class="nav-link active">Home</a>
+    <a href="content.html" class="nav-link">Library</a>
+    <a href="#" class="nav-link">Book Store</a>
+    <button class="search-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"/>
+        <path d="M21 21l-4.35-4.35"/>
+      </svg>
+    </button>
+  </div>
+  <div class="cart-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="9" cy="21" r="1"/>
+      <circle cx="20" cy="21" r="1"/>
+      <path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.72a2 2 0 001.99-1.61L23 6H6"/>
+    </svg>
+  </div>
+</nav>
+
+<main class="main">
+  <p class="page-title">Home</p>
+
+  <!-- ↓ replaced section -->
+  <div class="section-card">
+    <p class="section-label">More to Explore</p>
+    <div class="categories-row">
+      <div class="category-box">
+        <p class="cat-title">FICTIONS</p>
+        <div class="cat-books" id="fiction-books"></div>
+      </div>
+      <div class="category-box">
+        <p class="cat-title">NON-FICTION</p>
+        <div class="cat-books" id="nonfiction-books"></div>
+      </div>
+      <div class="category-box">
+        <p class="cat-title">LITERATURE</p>
+        <div class="cat-books" id="literature-books"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <p class="section-label">All Books</p>
+    <div class="bestsellers-row" id="bestsellers"></div>
+  </div>
+
+</main>
+
+
+<!-- Book Info Modal -->
+<div id="bookModal" class="book-modal-overlay" onclick="closeModal()">
+    <div class="book-modal" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div class="modal-content">
+            <img id="modalCover" src="" alt="" class="modal-cover" />
+            <div class="modal-info">
+                <h2 id="modalTitle"></h2>
+                <p id="modalAuthor"></p>
+                <p id="modalCategory"></p>
+                <button id="modalOpenBtn" onclick="openBookFile()">Open Book</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Reader Panel -->
+    <div id="readerPanel" class="reader-overlay" style="display:none;">
+        <div class="reader-header">
+            <span id="readerTitle"></span>
+            <div class="reader-controls">
+                <button onclick="prevPage()">&#8592;</button>
+                <span id="pageInfo">Page 1 of 1</span>
+                <button onclick="nextPage()">&#8594;</button>
+            </div>
+            <span id="readerProgress">0% read</span>
+            <button onclick="closeReader()">✕ Close</button>
+        </div>
+        <div class="reader-body">
+            <canvas id="pdfCanvas"></canvas>
+        </div>
+    </div>
+
+    <!-- Profile Panel -->
+    <div id="profilePanel" class="profile-panel" style="display:none;">
+        <button class="profile-option" onclick="goTo('settings')">Account Setting</button>
+        <button class="profile-option" onclick="goTo('assessment')">Assessment</button>
+        <button class="profile-option" onclick="goTo('about')">About AkLine</button>
+        <button class="profile-option logout-btn" onclick="logout()">Log Out</button>
+    </div>
+
+<script src="home.js"></script>
+</body>
+</html>

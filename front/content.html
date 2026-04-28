@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AkLine Library</title>
+    <link rel="stylesheet" href="content.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-profile">
+            <div class="profile-icon" onclick="toggleProfilePanel()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="home.html" class="nav-link">Home</a>
+            <a href="content.html" class="nav-link active">Library</a>
+            <a href="#" class="nav-link">Book Store</a>
+            <button class="search-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="7"/>
+                    <path d="M21 21l-4.35-4.35"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="nav-cart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"/>
+                <circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.72a2 2 0 001.99-1.61L23 6H6"/>
+            </svg>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <div id="adminPanel" style="display: none; margin-bottom: 20px;">
+            <h3 style="color: #c8b9f0; margin-bottom: 10px;">Admin — Add Book</h3>
+            <input id="bookTitle" type="text" placeholder="Book Title" style="margin-right: 10px; padding: 8px; border-radius: 8px; border: none;" />
+            <input id="bookAuthor" type="text" placeholder="Author" style="margin-right: 10px; padding: 8px; border-radius: 8px; border: none;" />
+            <input id="bookCover" type="text" placeholder="Cover Image URL (optional)" style="margin-right: 10px; padding: 8px; border-radius: 8px; border: none; width: 250px;" />
+            <select id="bookCategory" style="margin-right: 10px; padding: 8px; border-radius: 8px; border: none; background: white; color: black;">
+                <option value="">-- Category --</option>
+                <option value="fiction">Fiction</option>
+                <option value="non-fiction">Non-Fiction</option>
+                <option value="literature">Literature</option>
+            </select>
+            <!-- ← PDF file upload input -->
+            <input id="bookPdfFile" type="file" accept=".pdf" style="margin-right: 10px; padding: 8px;" />
+            <span id="uploadStatus" style="color: #c8b9f0; font-size: 14px;"></span>
+            <button onclick="addBook()" style="padding: 8px 20px; 
+                                               background: #c8b9f0; 
+                                               border: none; 
+                                               border-radius: 8px; 
+                                               cursor: pointer; 
+                                               font-weight: bold;">
+                                               Add Book
+            </button>
+        </div>
+
+        <h2 class="section-title">Library</h2>
+
+        <div class="library-container">
+            <!-- Book Cards -->
+            <!-- <div class="book-card">
+                <div class="book-cover cover-1"></div>
+                <p class="book-progress">80%</p>
+            </div>
+            <div class="book-card">
+                <div class="book-cover cover-2"></div>
+                <p class="book-progress">58%</p>
+            </div>
+            <div class="book-card">
+                <div class="book-cover cover-3"></div>
+                <p class="book-progress">38%</p>
+            </div>
+            <div class="book-card">
+                <div class="book-cover cover-4"></div>
+                <p class="book-progress">19%</p>
+            </div> -->
+
+            <div class="book-count">4 BOOKS</div>
+        </div>
+    </main>
+
+    <!-- Book Info Modal -->
+    <div id="bookModal" class="book-modal-overlay" onclick="closeModal()">
+        <div class="book-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-content">
+                <img id="modalCover" src="" alt="" class="modal-cover" />
+                <div class="modal-info">
+                    <h2 id="modalTitle"></h2>
+                    <p id="modalAuthor"></p>
+                    <p id="modalCategory"></p>
+                    <button id="modalOpenBtn" onclick="openBookFile()">Open Book</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reader Panel -->
+    <div id="readerPanel" class="reader-overlay" style="display:none;">
+        <div class="reader-header">
+            <span id="readerTitle"></span>
+            <div class="reader-controls">
+                <button onclick="prevPage()">&#8592;</button>
+                <span id="pageInfo">Page 1 of 1</span>
+                <button onclick="nextPage()">&#8594;</button>
+            </div>
+            <span id="readerProgress">0% read</span>
+            <button onclick="closeReader()">✕ Close</button>
+        </div>
+        <div class="reader-body">
+            <canvas id="pdfCanvas"></canvas>
+        </div>
+</div>
+
+        <!-- Profile Panel -->
+        <div id="profilePanel" class="profile-panel" style="display:none;">
+            <button class="profile-option" onclick="goTo('settings')">Account Setting</button>
+            <button class="profile-option" onclick="goTo('assessment')">Assessment</button>
+            <button class="profile-option" onclick="goTo('about')">About AkLine</button>
+            <button class="profile-option logout-btn" onclick="logout()">Log Out</button>
+        </div>
+
+<script src="content.js"></script>
+</body>
+</html>
