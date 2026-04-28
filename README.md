@@ -1,4 +1,4 @@
-# 📚 AkLine — Your Reading Sanctuary
+# AkLine — Your Reading Sanctuary
 
 > *Every book finds its reader under the stars.*
 
@@ -6,7 +6,7 @@ AkLine is a web-based book reader platform where users can register, browse book
 
 ---
 
-## 🌐 Live Demo
+## Live Demo
 
 | Service | URL |
 |---|---|
@@ -14,7 +14,7 @@ AkLine is a web-based book reader platform where users can register, browse book
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 EdTechWebsite/
@@ -37,7 +37,7 @@ EdTechWebsite/
 
 ---
 
-## ✨ Features
+## Features
 
 - **User Authentication** — Register, login, and email verification via Resend
 - **Admin Panel** — Admins can add and delete books
@@ -49,7 +49,7 @@ EdTechWebsite/
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - HTML, CSS, JavaScript
@@ -67,7 +67,7 @@ EdTechWebsite/
 
 ---
 
-## 🗃️ Database Schema
+## Database Schema
 
 ```sql
 -- Users table
@@ -142,7 +142,7 @@ CREATE TABLE reading_progress (
 
 ---
 
-## ⚙️ Environment Variables
+## Environment Variables
 
 Create a `.env` file in the `back/` directory:
 
@@ -164,7 +164,7 @@ API_KEY=your_secret_api_key
 
 ---
 
-## 🚀 Running Locally
+## Running Locally
 
 ### Backend
 ```bash
@@ -183,7 +183,7 @@ const API = 'http://localhost:3000';
 
 ---
 
-## 🚢 Deployment
+## Deployment
 
 | Service | Platform | Notes |
 |---|---|---|
@@ -195,7 +195,7 @@ const API = 'http://localhost:3000';
 
 ---
 
-## 👤 Admin Setup
+## Admin Setup
 
 To make a user an admin, run this SQL on your Railway PostgreSQL database:
 
@@ -205,6 +205,6 @@ UPDATE users SET is_admin = TRUE WHERE email = 'your-email@example.com';
 
 ---
 
-## 📄 License
+## License
 
 This project is for educational purposes.
