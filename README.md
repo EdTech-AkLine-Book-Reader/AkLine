@@ -11,7 +11,6 @@ AkLine is a web-based book reader platform where users can register, browse book
 | Service | URL |
 |---|---|
 | Frontend | [https://alkine.surge.sh](https://alkine.surge.sh) |
-| Backend API | [https://akline-backend-production.up.railway.app](https://akline-backend-production.up.railway.app) |
 
 ---
 
@@ -20,16 +19,16 @@ AkLine is a web-based book reader platform where users can register, browse book
 ```
 EdTechWebsite/
 ├── front/                  # Frontend (HTML, CSS, JS)
-│   ├── index.html          # Login & Register page
+│   ├── index.html          # Login and Register page
 │   ├── home.html           # Home page with book categories
 │   ├── content.html        # Library page
-│   ├── script.js           # Auth logic (login/register)
+│   ├── script.js           # Authentication logic (login/register)
 │   ├── home.js             # Home page logic
-│   ├── content.js          # Library & PDF reader logic
+│   ├── content.js          # Library and PDF reader logic
 │   ├── style.css           # Login/Register styles
 │   ├── home.css            # Home page styles
 │   ├── content.css         # Library styles
-│   └── res/                # Static assets (logo, background)
+│   └── res/                # Images
 └── back/                   # Backend (Node.js/Express)
     ├── server.js           # Main server file
     ├── package.json
@@ -43,7 +42,7 @@ EdTechWebsite/
 - **User Authentication** — Register, login, and email verification via Resend
 - **Admin Panel** — Admins can add and delete books
 - **PDF Upload** — Books uploaded to Cloudinary and stored as PDF files
-- **PDF Reader** — Built-in browser PDF reader using PDF.js
+- **PDF Reader** — Built-in browser PDF reader
 - **Reading Progress** — Track and save reading progress per book per user
 - **Book Categories** — Browse books by Fiction, Non-Fiction, and Literature
 - **Responsive Design** — Works on desktop, tablet, and mobile
@@ -53,8 +52,7 @@ EdTechWebsite/
 ## 🛠️ Tech Stack
 
 ### Frontend
-- HTML, CSS, JavaScript (Vanilla)
-- PDF.js (PDF rendering)
+- HTML, CSS, JavaScript
 - Deployed on **Surge** (`alkine.surge.sh`)
 
 ### Backend
