@@ -52,7 +52,7 @@ EdTechWebsite/
 ## Tech Stack
 
 ### Frontend
-- HTML, CSS, JavaScript
+- JavaScript
 - Deployed on **Surge** (`alkine.surge.sh`)
 
 ### Backend
