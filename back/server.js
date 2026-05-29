@@ -85,7 +85,7 @@ app.post('/api/register', async (req, res) => {
         res.status(201).json({ message: 'Registration successful! Please check your email to verify your account.' });
 
         // ← Send email AFTER responding so it doesn't block
-        const verifyLink = `https://akline-backend-production.up.railway.app/api/verify?token=${verifyToken}`;
+        const verifyLink = `https://kine-ackend-framedlynx7273-4h7rg5uk.leapcell.dev/api/verify?token=${verifyToken}`;
 
         resend.emails.send({
             from: 'noreply@edtech-akline.me',
