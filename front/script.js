@@ -1,4 +1,4 @@
-const API = 'https://kine-ackend-framedlynx7273-4h7rg5uk.leapcell.dev';
+const API = 'https://akline-backend-1.onrender.com';
 
 // Show/hide loading
 function setLoading(type, isLoading) {
