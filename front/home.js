@@ -1,6 +1,9 @@
 const API = 'https://akline-backend-1.onrender.com';
 
 async function loadHomeBooks() {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     try {
         const response = await fetch(`${API}/api/books`);
         const books = await response.json();
@@ -15,25 +18,39 @@ async function loadHomeBooks() {
         literatureEl.innerHTML = '';
         allBooksEl.innerHTML = '';
 
-        books.forEach(book => {
+        const coverCache = {};
+        books.forEach((book, index) => {
             const cat = (book.category || '').toLowerCase().trim();
 
-            function makeCover(enlarged = false) {
-                if (book.cover_url) {
+                function makeCover(enlarged = false) {
                     const img = document.createElement('img');
-                    img.src = book.cover_url;
                     img.alt = book.title;
                     img.title = book.title;
                     img.className = enlarged ? 'cat-cover-large' : '';
+                    img.style.objectFit = 'cover';
+                    img.style.width = enlarged ? '200px' : '70px';
+                    img.style.height = enlarged ? '300px' : '100px';
+                    img.style.borderRadius = '4px';
+
+                    if (book.cover_url) {
+                        img.src = book.cover_url;
+                        img.onerror = () => {
+                            if (book.file_url) renderPdfCover(book.file_url, img);
+                            else img.src = '';
+                        };
+                    } else if (book.file_url) {
+                        if (coverCache[book.id]) {
+                            img.src = coverCache[book.id];
+                        } else {
+                            img.src = '';
+                            renderPdfCover(book.file_url, img).then(dataUrl => {
+                                coverCache[book.id] = dataUrl;
+                            });
+                        }
+                    }
+
                     return img;
-                } else {
-                    const div = document.createElement('div');
-                    div.title = book.title;
-                    div.className = enlarged ? 'cat-placeholder-large' : 'cat-placeholder';
-                    div.textContent = book.title;
-                    return div;
                 }
-            }
 
             if (cat === 'fiction') fictionEl.appendChild(makeCover());
             else if (cat === 'non-fiction') nonfictionEl.appendChild(makeCover());
@@ -43,6 +60,9 @@ async function loadHomeBooks() {
             const item = document.createElement('div');
             item.className = 'book-item';
             item.style.cursor = 'pointer';
+
+            item.dataset.category = (book.category || '').toLowerCase().trim();
+
             item.appendChild(makeCover());
             item.addEventListener('click', () => {
                 openBookModal(book);  // ← open modal instead
@@ -52,88 +72,35 @@ async function loadHomeBooks() {
 
         // set up expand/collapse for each category box
         document.querySelectorAll('.category-box').forEach(box => {
-            const title = box.querySelector('.cat-title');
-            const booksEl = box.querySelector('.cat-books');
+    box.addEventListener('click', () => {
+        const cat = box.querySelector('.cat-title').textContent.toLowerCase().trim();
 
-            box.addEventListener('click', (e) => {
-                const isExpanded = box.classList.contains('expanded');
+        // map label to category value
+        const catMap = {
+            'fictions': 'fiction',
+            'non-fiction': 'non-fiction',
+            'literature': 'literature'
+        };
+        const filter = catMap[cat] || cat;
 
-                // collapse all first
-                document.querySelectorAll('.category-box').forEach(b => {
-                    b.classList.remove('expanded');
-                    b.querySelector('.cat-books').querySelectorAll('img, div').forEach(el => {
-                        el.classList.remove('cat-cover-large', 'cat-placeholder-large');
-                    });
-                });
+        // scroll to all books section
+        const allBooksSection = document.getElementById('bestsellers').closest('.section-card');
+        allBooksSection.scrollIntoView({ behavior: 'smooth' });
 
-                // if it wasn't expanded, expand it
-                if (!isExpanded) {
-                    box.classList.add('expanded');
-                    booksEl.querySelectorAll('img, div').forEach(el => {
-                        el.classList.add('cat-cover-large');
+        // filter books
+        document.querySelectorAll('#bestsellers .book-item').forEach(item => {
+            const bookCat = item.dataset.category;
+            item.style.display = (bookCat === filter) ? 'block' : 'none';
+        });
 
-                        const book = books.find(b => b.title === el.title);
-                        if (book) {
-                            el.style.cursor = 'pointer';
-                            el.onclick = (e) => {
-                                e.stopPropagation();
-                                openBookModal(book);
-                            };
-                        }
-                    });
-                }
-            });
-
-            // clicking title collapses
-            title.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isExpanded = box.classList.contains('expanded');
-
-    // collapse all first
-    document.querySelectorAll('.category-box').forEach(b => {
-        b.classList.remove('expanded');
-        b.querySelector('.cat-books').querySelectorAll('img, div').forEach(el => {
-            el.classList.remove('cat-cover-large', 'cat-placeholder-large');
+            // expand the section
+            allBooksSection.classList.add('expanded');
         });
     });
-
-    // if it wasn't expanded, expand it
-    if (!isExpanded) {
-        box.classList.add('expanded');
-        booksEl.querySelectorAll('img, div').forEach(el => {
-            el.classList.add('cat-cover-large');
-            const book = books.find(b => b.title === el.title);
-            if (book) {
-                el.style.cursor = 'pointer';
-                el.onclick = (ev) => {
-                    ev.stopPropagation();
-                    openBookModal(book);
-                };
-            }
-        });
-    }
-});
-        });
 
     } catch (err) {
         console.error('Failed to load home books:', err);
     }
-
-    // expand/collapse All Books section
-    const allBooksSection = document.getElementById('bestsellers').closest('.section-card');
-    const allBooksLabel = allBooksSection.querySelector('.section-label');
-
-    allBooksSection.addEventListener('click', (e) => {
-        // only trigger if clicking the label or empty space, not a book item
-        if (e.target.closest('.book-item')) return;
-
-        const isExpanded = allBooksSection.classList.contains('expanded');
-        if (!isExpanded) {
-            allBooksSection.classList.add('expanded');
-        } else {
-            allBooksSection.classList.remove('expanded');
-        }
-    });
 }
 
 loadHomeBooks();
@@ -143,9 +110,23 @@ let currentFileUrl = null;
 let currentBook = null;
 
 function openBookModal(book) {
-    currentBook = book;  // ← add this line
+    currentBook = book;
 
-    document.getElementById('modalCover').src = book.cover_url || '';
+    const modalCover = document.getElementById('modalCover');
+
+    if (book.cover_url) {
+        modalCover.src = book.cover_url;
+        modalCover.onerror = () => {
+            if (book.file_url) renderPdfCover(book.file_url, modalCover);
+            else modalCover.src = '';
+        };
+    } else if (book.file_url) {
+        modalCover.src = '';
+        renderPdfCover(book.file_url, modalCover);
+    } else {
+        modalCover.src = '';
+    }
+
     document.getElementById('modalTitle').textContent = book.title;
     document.getElementById('modalAuthor').textContent = book.author ? `by ${book.author}` : 'Author unknown';
     document.getElementById('modalCategory').textContent = book.category || 'Uncategorized';
@@ -308,4 +289,30 @@ function goTo(page) {
 function logout() {
     localStorage.removeItem('user');
     window.location.href = 'index.html';
+}
+
+async function renderPdfCover(fileUrl, imgEl) {
+    if (!window.pdfjsLib) {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+    }
+    if (!window.pdfjsLib.GlobalWorkerOptions.workerSrc) {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    try {
+        const pdf = await pdfjsLib.getDocument(fileUrl).promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1 });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+        const dataUrl = canvas.toDataURL();
+        imgEl.src = dataUrl;
+        return dataUrl;
+    } catch (err) {
+        console.error('Cover render failed:', err);
+    }
 }

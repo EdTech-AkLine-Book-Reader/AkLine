@@ -78,10 +78,7 @@ async function loadBooks() {
             const card = document.createElement('div');
             card.classList.add('book-card');
             card.innerHTML = `
-                ${book.cover_url
-                    ? `<img src="${book.cover_url}" class="book-cover" />`
-                    : `<div class="book-cover cover-${(index % 4) + 1}"></div>`
-                }
+                <img id="cover-${book.id}" class="book-cover" />
                 <p class="book-title">${book.title}</p>
                 <div class="progress-container">
                     <div class="progress-bar-track">
@@ -111,9 +108,11 @@ async function loadBooks() {
             slider.addEventListener('click', e => e.stopPropagation());
 
             container.insertBefore(card, bookCount);
+            loadBookCover(book, index);
         });
 
         bookCount.textContent = `${books.length} BOOKS`;
+        container.style.display = books.length > 0 ? 'flex' : 'none';
 
     } catch (err) { console.error('Failed to load books:', err); }
 }
@@ -196,7 +195,19 @@ async function deleteBook(bookId) {
 // ── Modal ─────────────────────────────────────────────
 function openBookModal(book) {
     currentBook = book;
-    document.getElementById('modalCover').src = book.cover_url || '';
+    const modalCover = document.getElementById('modalCover');
+    if (book.cover_url) {
+        modalCover.src = book.cover_url;
+        modalCover.onerror = () => {
+            if (book.file_url) renderPdfCover(book.file_url, modalCover);
+            else modalCover.src = '';
+        };
+    } else if (book.file_url) {
+        modalCover.src = '';
+        renderPdfCover(book.file_url, modalCover);
+    } else {
+        modalCover.src = '';
+    }
     document.getElementById('modalTitle').textContent = book.title;
     document.getElementById('modalAuthor').textContent = book.author ? `by ${book.author}` : 'Author unknown';
     document.getElementById('modalCategory').textContent = book.category || 'Uncategorized';
@@ -330,4 +341,60 @@ function goTo(page) {
 function logout() {
     localStorage.removeItem('user');
     window.location.href = 'index.html';
+}
+
+async function loadBookCover(book, index) {
+    const img = document.getElementById(`cover-${book.id}`);
+    if (!img) return;
+
+    if (book.cover_url) {
+        img.src = book.cover_url;
+        return;
+    }
+
+    if (!book.file_url) {
+        img.src = ''; // no cover, no pdf
+        return;
+    }
+
+    if (!window.pdfjsLib) {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    try {
+        const pdf = await pdfjsLib.getDocument(book.file_url).promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1 });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+        img.src = canvas.toDataURL();
+    } catch (err) {
+        console.error('Cover render failed:', err);
+    }
+}
+
+async function renderPdfCover(fileUrl, imgEl) {
+    if (!window.pdfjsLib) {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+    }
+    if (!window.pdfjsLib.GlobalWorkerOptions.workerSrc) {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+    try {
+        const pdf = await pdfjsLib.getDocument(fileUrl).promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1 });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+        imgEl.src = canvas.toDataURL();
+    } catch (err) {
+        console.error('Cover render failed:', err);
+    }
 }

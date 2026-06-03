@@ -130,11 +130,10 @@ body {
     background: #252b3b;
     border-radius: 20px;
     padding: 40px 36px 24px;
-    display: flex;
+    display: none;
     align-items: flex-end;
     gap: 24px;
     flex-wrap: wrap;
-    min-height: 500px;
     left: 7%;
 }
 
